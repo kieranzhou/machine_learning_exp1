@@ -26,7 +26,7 @@ for train_var in os.listdir(train_dir):
         # splitting the words
         # print(lines)
         for sentence in lines:
-            temp_list = list(filter(None, re.split(r'[!:@#$%^&*?/\-,.\s\n\(\)]\s*', sentence)))
+            temp_list = list(filter(None, re.split(r'[0-9!:@#$%^&*?/<>,.+=_;|{}~`\-\s\n\(\)\\\'\[\]\"]\s*', sentence)))
             for word in temp_list:
                 if word == '':
                     continue
