@@ -53,7 +53,10 @@ for i in range(0, len(dic)):
     else:  
         temp += 1
 print (dic)
-
+stat_dic = []
+for i in range(0, len(dic)):
+    stat_dic.append([dic[i], i])
+print(stat_dic)
 
 
 
