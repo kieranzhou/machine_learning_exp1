@@ -58,6 +58,11 @@ for i in range(0, len(dic)):
     stat_dic.append([dic[i], i])
 print(stat_dic)
 
+f = open("Dictionary.txt",'a')
+for item in stat_dic:
+    f.write(strcontent)
+    f.write('\n')
+f.close
 
 
 

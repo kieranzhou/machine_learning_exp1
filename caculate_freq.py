@@ -11,7 +11,8 @@ import os
 #-----------------------------------------step0 prepare all the textfile--------------------------------------------------------------------------------------------
 train_dir = r'.\dataset\20news-bydate\20news-bydate-train'
 # using stat_dic
-stat_dic = []
+stat_dic = []   #need to change the global dic
+documents = []   #document saves each document's feature
 for train_var in os.listdir(train_dir):
     temp_dir = train_dir + '\\' + train_var
     for data_file in os.listdir(temp_dir):
@@ -19,6 +20,9 @@ for train_var in os.listdir(train_dir):
         fp = open(file_addr, encoding='gb18030', errors = 'ignore') #tag:maybe error later
         lines = fp.readlines()
         fp.close()
+        
+        file_features = []
+        
         head = 0
         for item in enumerate(lines):
             if item[1][0:5].strip() == 'Lines': 
@@ -35,19 +39,18 @@ for train_var in os.listdir(train_dir):
             temp_dic[i] = temp_dic[i].lower
         temp_dic = list(set(temp_dic))
         temp_dic.sort()
-        # passage_length = len(temp_dic)
-        document_dic = []
+        forsearch = []
         for token in temp_dic:
-        # the global map is from the stat_dic
+        # the global map is from the stat_dic, however i want to use the hashmap as the pdf said, but i searched for the hashmap
+        #and eventually it seems that the dic format is quite like the hashmap and it's the bucket sort.
         # the basic map is based on each document
-            for i in range(0, len(stat_dic)):
-                if stat_dic[i][0] == token:
-                
-                break
-print (dic)
-
-
-
+            if token in stat_dic:
+                if token in forsearch:
+                    file_features[forsearch.index(token)] += 1
+                    continue
+                temprary_feature = [token, stat_dic.index(token)]
+                file_features.append(temprary_feature)
+        documents.append(file_features)
 
 
 # next step = idf-----------------------------------------------------------------------------------------
