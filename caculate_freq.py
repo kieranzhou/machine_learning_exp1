@@ -14,6 +14,7 @@ import math
 #----------------------------------------------------------------------------------------------------------------------
 def zerolistmaker(n):
     listofzeros = [0] * n
+    print(type(listofzeros))
     return listofzeros
 #-----------------------------------------step0 prepare all the textfile--------------------------------------------------------------------------------------------
 train_dir = r'.\dataset\20news-bydate\20news-bydate-train'
@@ -69,7 +70,7 @@ documents.append(len(os.listdir(train_dir)))
 # next step = idf-----------------------------------------------------------------------------------------
 # by using the temprary_feature to form the tf-idf
 # the data structure of document_feature is (order, tf, tf-idf)           
-for var in documents:
+for var in documents[0:-1]:
     var_leng = var[-1][0]
     idf = zerolistmaker(len(stat_dic))
     for doc in var[0:-1]:
@@ -78,19 +79,18 @@ for var in documents:
         for feat in doc[0:-1]:
             # doc[i][1] = doc[i][1]/length
             feat[1] = feat[1]/length       #calculate the tf
-            idf[feat[0]] += 1
-            # idf[doc[i][0]] += 1           #prepare the idf
+            idf[feat[0]] += 1               #prepare the idf
         print(doc[-2])
-    for i in idf:
-        if i != 0:
-            i = math.log(var_leng/i, 10)
-    for doc in var:
-        for feat in doc:
+    for i in range(0, len(idf)):
+        if idf[i] != 0:
+            idf[i] = math.log(var_leng/idf[i], 10)
+    for doc in var[0:-1]:
+        for feat in doc[0:-1]:
             feat.append(idf[feat[0]])   #property idf
             feat.append(idf[feat[0]] * feat[1]) #tf-idf frequency
 # write the file----------------------------------------------------------------------------------------------
 
-fp = open("frequency.txt", 'a')
+fp = open("frequency.txt", 'w')
 vars_amts = documents[-1]
 for i in range(0, vars_amts):
     docs_amts = documents[i][-1][0]
@@ -98,9 +98,10 @@ for i in range(0, vars_amts):
     fp.write(var_name + ' ')
     fp.write(str(docs_amts) + ' ')
     for j in range(0, docs_amts):
-        attrs_amts = documents[i][j][-1]
+        attrs_amts = len(documents[i][j]) - 1
+        # attrs_amts = documents[i][j][-1]
         fp.write(str(attrs_amts) + ' ')
         for m in range(0, attrs_amts):
-            fp.write(documents[i][j][m][0] + ' ' + str(documents[i][j][m][1]) + ' ' + str(documents[i][j][m][2]) + ' ' + str(documents[i][j][m][3]))
+            fp.write(str(documents[i][j][m][0]) + ' ' + str(documents[i][j][m][1]) + ' ' + str(documents[i][j][m][2]) + ' ' + str(documents[i][j][m][3]) + ' ')
     fp.write('\n')
 fp.close()
