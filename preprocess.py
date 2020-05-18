@@ -59,11 +59,15 @@ for i in range(0, len(dic)):
     stat_dic.append([dic[i], i])
 print(stat_dic)
 
-f = open("Dictionary.txt",'a')
+f = open("Dictionary_with_number.txt",'a')
+actually_file = open("Dictionary.txt", 'a')
 for item in stat_dic:
-    f.write(strcontent)
+    actually_file.write(item[0])
+    actually_file.write('\n')
+    f.write(str(item))
     f.write('\n')
-f.close
+actually_file.close()
+f.close()
 
 
 
