@@ -72,14 +72,18 @@ documents.append(len(os.listdir(train_dir)))
 for var in documents:
     var_leng = var[-1][0]
     idf = zerolistmaker(len(stat_dic))
-    for doc in var:
+    for doc in var[0:-1]:
         length = doc[-1]
-        for feat in doc:
-            feat[1] = feat/length       #calculate the tf
-            idf[feat[0]] += 1           #prepare the idf
+        # for i in range(0, len(doc) - 1):
+        for feat in doc[0:-1]:
+            # doc[i][1] = doc[i][1]/length
+            feat[1] = feat[1]/length       #calculate the tf
+            idf[feat[0]] += 1
+            # idf[doc[i][0]] += 1           #prepare the idf
+        print(doc[-2])
     for i in idf:
         if i != 0:
-            idf[i] = math.log(var_leng/idf[i], 10)
+            i = math.log(var_leng/i, 10)
     for doc in var:
         for feat in doc:
             feat.append(idf[feat[0]])   #property idf
