@@ -25,10 +25,10 @@ fp.close()
 documents = []  #saving the info
 for train_var in os.listdir(train_dir):
     varis = []   #each document saves each document's feature
-    temp_dir = train_dir + '\\' + train_var
-    for data_file in os.listdir(temp_dir):
+    doc_dir = train_dir + '\\' + train_var
+    for data_file in os.listdir(doc_dir):
         file_features = []#each file feature init
-        file_addr = temp_dir + '\\' + data_file
+        file_addr = doc_dir + '\\' + data_file
         fp = open(file_addr, encoding='gb18030', errors = 'ignore') #tag:maybe error later
         lines = fp.readlines()
         fp.close()
@@ -62,13 +62,13 @@ for train_var in os.listdir(train_dir):
                 file_features.append(temprary_feature)
         file_features.append(len(temp_dic))
         varis.append(file_features)
-    varis.append([len(os.listdir(train_dir)), train_var])
+    varis.append([len(os.listdir(doc_dir)), train_var])
     documents.append(varis)
+documents.append(len(os.listdir(train_dir)))
 
 # next step = idf-----------------------------------------------------------------------------------------
 # by using the temprary_feature to form the tf-idf
-# the data structure of document_feature is (order, tf, tf-idf)
-document_feature = []           
+# the data structure of document_feature is (order, tf, tf-idf)           
 for var in documents:
     var_leng = var[-1][0]
     idf = zerolistmaker(len(stat_dic))
@@ -84,4 +84,19 @@ for var in documents:
         for feat in doc:
             feat.append(idf[feat[0]])   #property idf
             feat.append(idf[feat[0]] * feat[1]) #tf-idf frequency
-# last step = sparse coding-------------------------------------------------------------------------------
+# write the file----------------------------------------------------------------------------------------------
+
+fp = open("frequency.txt", 'a')
+vars_amts = documents[-1]
+for i in range(0, vars_amts):
+    docs_amts = documents[i][-1][0]
+    var_name = documents[i][-1][1]
+    fp.write(var_name + ' ')
+    fp.write(str(docs_amts) + ' ')
+    for j in range(0, docs_amts):
+        attrs_amts = documents[i][j][-1]
+        fp.write(str(attrs_amts) + ' ')
+        for m in range(0, attrs_amts):
+            fp.write(documents[i][j][m][0] + ' ' + str(documents[i][j][m][1]) + ' ' + str(documents[i][j][m][2]) + ' ' + str(documents[i][j][m][3]))
+    fp.write('\n')
+fp.close()
