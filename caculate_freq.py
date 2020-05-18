@@ -17,8 +17,11 @@ def zerolistmaker(n):
     return listofzeros
 #-----------------------------------------step0 prepare all the textfile--------------------------------------------------------------------------------------------
 train_dir = r'.\dataset\20news-bydate\20news-bydate-train'
-# using stat_dic
 stat_dic = []   #need to change the global dic
+fp = open('Dictionary.txt', encoding = 'gb18030', errors= 'ignore')
+for line in fp.readlines():
+    stat_dic.append(line.strip('\n'))
+fp.close()
 documents = []  #saving the info
 for train_var in os.listdir(train_dir):
     varis = []   #each document saves each document's feature
@@ -42,8 +45,8 @@ for train_var in os.listdir(train_dir):
                 if word not in temp_dic:
                     temp_dic.append(word)
         for i in range(0, len(temp_dic)):
-            temp_dic[i] = temp_dic[i].lower
-        temp_dic = list(set(temp_dic))
+            temp_dic[i] = temp_dic[i].lower()
+        # temp_dic = list(set(temp_dic))
         temp_dic.sort()
         forsearch = []
         for token in temp_dic:

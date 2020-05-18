@@ -36,7 +36,7 @@ for train_var in os.listdir(train_dir):
 for i in range(0,len(dic)):
     dic[i] = dic[i].lower()
 dic = (list(set(dic)))
-dic.sort()#bad idea
+dic.sort()#bad idea shit word 
 
 # delete stopword
 fp = open('stopwords.txt')
@@ -59,8 +59,8 @@ for i in range(0, len(dic)):
     stat_dic.append([dic[i], i])
 print(stat_dic)
 
-f = open("Dictionary_with_number.txt",'a')
-actually_file = open("Dictionary.txt", 'a')
+f = open("Dictionary_with_number.txt",'w')
+actually_file = open("Dictionary.txt", 'w')
 for item in stat_dic:
     actually_file.write(item[0])
     actually_file.write('\n')
