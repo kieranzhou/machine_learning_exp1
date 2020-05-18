@@ -37,6 +37,7 @@ for i in range(0,len(dic)):
     dic[i] = dic[i].lower()
 dic = (list(set(dic)))
 dic.sort()#bad idea
+
 # delete stopword
 fp = open('stopwords.txt')
 try:
@@ -53,7 +54,16 @@ for i in range(0, len(dic)):
     else:  
         temp += 1
 print (dic)
+stat_dic = []
+for i in range(0, len(dic)):
+    stat_dic.append([dic[i], i])
+print(stat_dic)
 
+f = open("Dictionary.txt",'a')
+for item in stat_dic:
+    f.write(strcontent)
+    f.write('\n')
+f.close
 
 
 

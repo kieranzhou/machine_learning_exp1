@@ -37,6 +37,7 @@ for i in range(0,len(dic)):
     dic[i] = dic[i].lower()
 dic = (list(set(dic)))
 dic.sort()#bad idea
+
 # delete stopword
 fp = open('stopwords.txt')
 try:

@@ -4,25 +4,31 @@
 # word (obtained by dividing the total number of documents by the number of documents containing the term, and 
 # then taking the logarithm of that quotient)
 
+# make another tf-idf to represent the importance of each word
 
 # term frequency------------------------------------------------------------------------------------------------
 import re
 import os
+import math
+
+#----------------------------------------------------------------------------------------------------------------------
+def zerolistmaker(n):
+    listofzeros = [0] * n
+    return listofzeros
 #-----------------------------------------step0 prepare all the textfile--------------------------------------------------------------------------------------------
 train_dir = r'.\dataset\20news-bydate\20news-bydate-train'
 # using stat_dic
 stat_dic = []   #need to change the global dic
-documents = []   #document saves each document's feature
+documents = []  #saving the info
 for train_var in os.listdir(train_dir):
+    varis = []   #each document saves each document's feature
     temp_dir = train_dir + '\\' + train_var
     for data_file in os.listdir(temp_dir):
+        file_features = []#each file feature init
         file_addr = temp_dir + '\\' + data_file
         fp = open(file_addr, encoding='gb18030', errors = 'ignore') #tag:maybe error later
         lines = fp.readlines()
         fp.close()
-        
-        file_features = []
-        
         head = 0
         for item in enumerate(lines):
             if item[1][0:5].strip() == 'Lines': 
@@ -46,12 +52,33 @@ for train_var in os.listdir(train_dir):
         # the basic map is based on each document
             if token in stat_dic:
                 if token in forsearch:
-                    file_features[forsearch.index(token)] += 1
+                    file_features[forsearch.index(token)][1] += 1
                     continue
-                temprary_feature = [token, stat_dic.index(token)]
+                temprary_feature = [stat_dic.index(token), 1]
+                forsearch.append(token)
                 file_features.append(temprary_feature)
-        documents.append(file_features)
-
+        file_features.append(len(temp_dic))
+        varis.append(file_features)
+    varis.append([len(os.listdir(train_dir)), train_var])
+    documents.append(varis)
 
 # next step = idf-----------------------------------------------------------------------------------------
+# by using the temprary_feature to form the tf-idf
+# the data structure of document_feature is (order, tf, tf-idf)
+document_feature = []           
+for var in documents:
+    var_leng = var[-1][0]
+    idf = zerolistmaker(len(stat_dic))
+    for doc in var:
+        length = doc[-1]
+        for feat in doc:
+            feat[1] = feat/length       #calculate the tf
+            idf[feat[0]] += 1           #prepare the idf
+    for i in idf:
+        if i != 0:
+            idf[i] = math.log(var_leng/idf[i], 10)
+    for doc in var:
+        for feat in doc:
+            feat.append(idf[feat[0]])   #property idf
+            feat.append(idf[feat[0]] * feat[1]) #tf-idf frequency
 # last step = sparse coding-------------------------------------------------------------------------------
