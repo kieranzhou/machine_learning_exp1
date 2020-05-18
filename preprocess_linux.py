@@ -61,7 +61,7 @@ print(stat_dic)
 
 f = open("Dictionary.txt",'a')
 for item in stat_dic:
-    f.write(strcontent)
+    f.write(str(item))
     f.write('\n')
 f.close
 
