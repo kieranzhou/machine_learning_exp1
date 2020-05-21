@@ -1,6 +1,16 @@
 # this file is for calculate the perceptron
 # step1:read the file from frequency.txt----------------------------------------
 import re
+def zerolistmaker(n):
+    listofzeros = [0] * n
+    print(type(listofzeros))
+    return listofzeros
+
+def vector_multi(m, n):
+    
+
+
+
 data = []
 # empty_list = [] append(copy.deepcopy(empty_list))
 counter = 0      #counter is for vars
@@ -24,8 +34,42 @@ with open('frequency.txt', 'r') as f:
             data[counter][i].append(characters_amt) #adding characters amount
         data[counter].append([var_name, files_amt]) #adding files amount
         counter += 1
-    data.append(counter)
-print(data[-1])                            #adding vars amount
+    data.append(counter)                            #adding vars amount
+# print(data[-1])                            
+#part2: reading the dictionary--------------------------------------------------------------------------------------------------------------------------
+
+stat_dic = []   #need to change the global dic
+fp = open('Dictionary.txt', encoding = 'gb18030', errors= 'ignore')
+for line in fp.readlines():
+    stat_dic.append(line.strip('\n'))
+fp.close()
+
+#part3: preparing for the perceptron--------------------------------------------------------------------------------------------------------------------------
+
+# creating n spliters, preparing the parameters
+# the form is f(wx+b), init the w and b
+var_amts = data[-1]
+w = []
+for i in range(0, var_amts):
+    w.append(zerolistmaker(len(stat_dic)))
+b = zerolistmaker(var_amts)
+# define the learning_step and threshold, preset 0.1 and ?not sure
+step = 0.01
+threshold = 0.5
+
+for one_var in data:
+    var_name = one_var[-1] [0]
+    files_amt = one_var[-1][1]
+    while(1):
+        for i in range(0, files_amt):
+            # w*x+b
+            if 
+            
+
+
+
+
+
 
 
             
