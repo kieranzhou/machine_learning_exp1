@@ -25,7 +25,7 @@ with open('frequency.txt', 'r') as f:
         data[counter].append([var_name, files_amt]) #adding files amount
         counter += 1
     data.append(counter)
-# print(data[-1])                            #adding vars amount
+print(data[-1])                            #adding vars amount
 
 
             
