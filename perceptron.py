@@ -6,9 +6,14 @@ def zerolistmaker(n):
     print(type(listofzeros))
     return listofzeros
 
-def vector_multi(m, n):
-    
-
+def vector_multi(w, x, b):
+    length = x[-1]
+    total = 0
+    for i in range(0, length):
+        temp = x[i][0]
+        total += w[temp] * x[i][3]
+    total += b
+    return total
 
 
 data = []
@@ -58,12 +63,14 @@ step = 0.01
 threshold = 0.5
 
 for one_var in data:
+    split_num = data.index(one_var)
     var_name = one_var[-1] [0]
     files_amt = one_var[-1][1]
     while(1):
         for i in range(0, files_amt):
             # w*x+b
-            if 
+            if (vector_multi(w[split_num], one_var[i], b[split_num]) < 0):
+                
             
 
 

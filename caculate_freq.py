@@ -58,7 +58,7 @@ for train_var in os.listdir(train_dir):
                 if token in forsearch:
                     file_features[forsearch.index(token)][1] += 1
                     continue
-                temprary_feature = [stat_dic.index(token), 1]
+                temprary_feature = [stat_dic.index(token), 1]           #so the num is about 0-N-1
                 forsearch.append(token)
                 file_features.append(temprary_feature)
         file_features.append(len(temp_dic))
