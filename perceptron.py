@@ -70,8 +70,8 @@ step = 0.01
 threshold = 0.5
 
 # preparing the presplitor-----------------------------------------------------------------------------------------------------------------------------------
-for one_var in data:
-    split_num = data.index(one_var)
+for one_var in data[0:-1]:
+    split_num = int(data.index(one_var))
     var_name = one_var[-1] [0]
     files_amt = one_var[-1][1]
     while(1):
@@ -81,18 +81,78 @@ for one_var in data:
             for j in range(0, var_amt):
                 if j == split_num:
                     continue
-                if (vector_multi(w[split_num], one_var[i], b[split_num]) <= vector_multi(w[split_num[j]], one_var[i], b[j])):
+                if (vector_multi(w[split_num], one_var[i], b[split_num]) <= vector_multi(w[j], one_var[i], b[j])):
                     # adjust the w and b
                     w[split_num] = adjustw(w[split_num], one_var[i], step, 1)
                     w[j] = adjustw(w[j], one_var[i], step, -1)
                     b[split_num] += step
-                    b[j] += step
+                    b[j] -= step
                     flag = 0
         if flag == 1:
             break
-#presplitorfinish-------------------------------------------------------------------------------------------------------------------------------------------
+# presplitorfinish-------------------------------------------------------------------------------------------------------------------------------------------
 
-            
+# try till it satisfy the result or try serveral times and just have an well result
+# step could be deliminate with the loop goes on.
+# i thought it is the second option that could just be so-so answer. mix
+interval = 2
+rate = 1
+#only for test------------------------------------------------------------------------------------------------------
+
+for one_var in data[0:-1]:
+    split_num = int(data.index(one_var))
+    var_name = one_var[-1] [0]
+    files_amt = one_var[-1][1]
+    while(1):
+        flag = 1
+        for i in range(0, files_amt):
+            # w*x+b
+            for j in range(0, var_amt):
+                if j == split_num:
+                    continue
+                if (vector_multi(w[split_num], one_var[i], b[split_num]) <= vector_multi(w[j], one_var[i], b[j])):
+                    # adjust the w and b
+                    print(vector_multi(w[split_num], one_var[i], b[split_num]))
+                    print(vector_multi(w[j], one_var[i], b[j]))
+                    w[split_num] = adjustw(w[split_num], one_var[i], step, 1)
+                    w[j] = adjustw(w[j], one_var[i], step, -1)
+                    b[split_num] += step
+                    b[j] -= step
+                    flag = 0
+        if flag == 1:
+            break
+
+
+
+
+
+
+
+
+
+#only for test------------------------------------------------------------------------------------------------------
+
+""" while(1):
+    for one_var in data:
+        split_num = data.index(one_var)
+        var_name = one_var[-1] [0]
+        files_amt = one_var[-1][1]
+        while(1):
+            flag = 1
+            for i in range(0, files_amt):
+                # w*x+b
+                for j in range(0, var_amt):
+                    if j == split_num:
+                        continue
+                    if (vector_multi(w[split_num], one_var[i], b[split_num]) <= vector_multi(w[split_num[j]], one_var[i], b[j])):
+                        # adjust the w and b
+                        w[split_num] = adjustw(w[split_num], one_var[i], step, 1)
+                        w[j] = adjustw(w[j], one_var[i], step, -1)
+                        b[split_num] += step
+                        b[j] += step
+                        flag = 0
+            if flag == 1:
+                break """
 
                 
             
