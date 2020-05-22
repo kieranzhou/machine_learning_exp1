@@ -3,7 +3,7 @@
 import re
 def zerolistmaker(n):
     listofzeros = [0] * n
-    print(type(listofzeros))
+    # print(type(listofzeros))
     return listofzeros
 
 def vector_multi(w, x, b):
@@ -68,7 +68,8 @@ b = zerolistmaker(var_amt)
 # define the learning_step and threshold, preset 0.1 and ?not sure
 step = 0.01
 threshold = 0.5
-
+interval = 2
+rate = 1
 # preparing the presplitor-----------------------------------------------------------------------------------------------------------------------------------
 for one_var in data[0:-1]:
     split_num = int(data.index(one_var))
@@ -95,32 +96,68 @@ for one_var in data[0:-1]:
 # try till it satisfy the result or try serveral times and just have an well result
 # step could be deliminate with the loop goes on.
 # i thought it is the second option that could just be so-so answer. mix
-interval = 2
-rate = 1
-#only for test------------------------------------------------------------------------------------------------------
 
+#only for test------------------------------------------------------------------------------------------------------
+for time in range(0, 200):
+    for one_var in data[0:-1]:
+        split_num = int(data.index(one_var))
+        var_name = one_var[-1] [0]
+        files_amt = one_var[-1][1]
+        while(1):
+            flag = 1
+            for i in range(0, files_amt):
+                # w*x+b
+                for j in range(0, var_amt):
+                    if j == split_num:
+                        continue
+                    if (vector_multi(w[split_num], one_var[i], b[split_num]) <= vector_multi(w[j], one_var[i], b[j])):
+                        # adjust the w and b
+                        print(vector_multi(w[split_num], one_var[i], b[split_num]))
+                        print(vector_multi(w[j], one_var[i], b[j]))
+                        w[split_num] = adjustw(w[split_num], one_var[i], step, 1)
+                        w[j] = adjustw(w[j], one_var[i], step, -1)
+                        b[split_num] += step / (time+1)
+                        b[j] -= step / (time + 1)
+                        flag = 0
+            if flag == 1:
+                break
+timetosee = 0
+
+# approxmately 100  and maybe we could successed it, but maybe it is too similar with the train data
+# adjusting the parameter is the most important affair now.
+
+
+# making a checking function
 for one_var in data[0:-1]:
     split_num = int(data.index(one_var))
     var_name = one_var[-1] [0]
     files_amt = one_var[-1][1]
-    while(1):
-        flag = 1
-        for i in range(0, files_amt):
-            # w*x+b
-            for j in range(0, var_amt):
-                if j == split_num:
-                    continue
-                if (vector_multi(w[split_num], one_var[i], b[split_num]) <= vector_multi(w[j], one_var[i], b[j])):
-                    # adjust the w and b
-                    print(vector_multi(w[split_num], one_var[i], b[split_num]))
-                    print(vector_multi(w[j], one_var[i], b[j]))
-                    w[split_num] = adjustw(w[split_num], one_var[i], step, 1)
-                    w[j] = adjustw(w[j], one_var[i], step, -1)
-                    b[split_num] += step
-                    b[j] -= step
-                    flag = 0
-        if flag == 1:
-            break
+    flag = 1
+    accuate = 0
+    for i in range(0, files_amt):
+        # w*x+b
+        judge_func = var_amt - 1
+        for j in range(0, var_amt):
+            if j == split_num:
+                continue
+            if (vector_multi(w[split_num], one_var[i], b[split_num]) >= vector_multi(w[j], one_var[i], b[j])):
+                # adjust the w and b
+                judge_func -= 1
+        if judge_func == 0:
+            # print("accuate")
+            accuate += 1
+        # else:
+            # print("false")
+    # print(accuate)
+    print(accuate/files_amt)
+
+
+
+
+
+
+
+
 
 
 
