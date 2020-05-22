@@ -15,6 +15,13 @@ def vector_multi(w, x, b):
     total += b
     return total
 
+def adjustw(w, x, step, para):
+    length = x[-1]
+    for i in range (0, length):
+        temp = x[i][0]
+        w[temp] += step * x[i][3] * para
+    return w
+
 
 data = []
 # empty_list = [] append(copy.deepcopy(empty_list))
@@ -53,23 +60,40 @@ fp.close()
 
 # creating n spliters, preparing the parameters
 # the form is f(wx+b), init the w and b
-var_amts = data[-1]
+var_amt = data[-1]
 w = []
-for i in range(0, var_amts):
+for i in range(0, var_amt):
     w.append(zerolistmaker(len(stat_dic)))
-b = zerolistmaker(var_amts)
+b = zerolistmaker(var_amt)
 # define the learning_step and threshold, preset 0.1 and ?not sure
 step = 0.01
 threshold = 0.5
 
+# preparing the presplitor-----------------------------------------------------------------------------------------------------------------------------------
 for one_var in data:
     split_num = data.index(one_var)
     var_name = one_var[-1] [0]
     files_amt = one_var[-1][1]
     while(1):
+        flag = 1
         for i in range(0, files_amt):
             # w*x+b
-            if (vector_multi(w[split_num], one_var[i], b[split_num]) < 0):
+            for j in range(0, var_amt):
+                if j == split_num:
+                    continue
+                if (vector_multi(w[split_num], one_var[i], b[split_num]) <= vector_multi(w[split_num[j]], one_var[i], b[j])):
+                    # adjust the w and b
+                    w[split_num] = adjustw(w[split_num], one_var[i], step, 1)
+                    w[j] = adjustw(w[j], one_var[i], step, -1)
+                    b[split_num] += step
+                    b[j] += step
+                    flag = 0
+        if flag == 1:
+            break
+#presplitorfinish-------------------------------------------------------------------------------------------------------------------------------------------
+
+            
+
                 
             
 
