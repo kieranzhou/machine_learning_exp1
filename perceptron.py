@@ -26,7 +26,7 @@ def adjustw(w, x, step, para):
 data = []
 # empty_list = [] append(copy.deepcopy(empty_list))
 counter = 0      #counter is for vars
-with open('frequency.txt', 'r') as f:
+with open('train_frequency.txt', 'r') as f:
     alldata = f.readlines()
     for temp_var in alldata:
         tmp_list = list(filter(None, re.split(r'[\s\n]\s*', temp_var)))
@@ -98,7 +98,7 @@ for one_var in data[0:-1]:
 # i thought it is the second option that could just be so-so answer. mix
 
 #only for test------------------------------------------------------------------------------------------------------
-for time in range(0, 200):
+for time in range(0, 100):
     for one_var in data[0:-1]:
         split_num = int(data.index(one_var))
         var_name = one_var[-1] [0]
@@ -126,7 +126,7 @@ timetosee = 0
 # approxmately 100  and maybe we could successed it, but maybe it is too similar with the train data
 # adjusting the parameter is the most important affair now.
 
-
+print("train check------------------------------------------------------------")
 # making a checking function
 for one_var in data[0:-1]:
     split_num = int(data.index(one_var))
@@ -150,20 +150,6 @@ for one_var in data[0:-1]:
             # print("false")
     # print(accuate)
     print(accuate/files_amt)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -191,7 +177,58 @@ for one_var in data[0:-1]:
             if flag == 1:
                 break """
 
-                
+
+# writing the checking function for all the testing data
+print("testing train-----------------------------------------------------------------") 
+
+test_data = []
+# empty_list = [] append(copy.deepcopy(empty_list))
+test_counter = 0      #counter is for vars
+with open('test_frequency.txt', 'r') as f:
+    alldata = f.readlines()
+    for temp_var in alldata:
+        tmp_list = list(filter(None, re.split(r'[\s\n]\s*', temp_var)))
+        test_data.append([])         #vars
+        var_name = tmp_list[0]
+        files_amt = int(tmp_list[1])
+        temp_point = 2
+        for i in range(0, files_amt):
+            test_data[test_counter].append([])        #files
+            characters_amt = int(tmp_list[temp_point])
+            temp_point += 1
+            for j in range(0, characters_amt):
+                # read 4 element
+                four_elements = [int(tmp_list[temp_point]), float(tmp_list[temp_point + 1]), float(tmp_list[temp_point + 2]), float(tmp_list[temp_point + 3])]
+                test_data[test_counter][i].append(four_elements)
+                temp_point += 4
+            test_data[test_counter][i].append(characters_amt) #adding characters amount
+        test_data[test_counter].append([var_name, files_amt]) #adding files amount
+        test_counter += 1
+    test_data.append(test_counter)                            #adding vars amount
+
+
+for one_var in test_data[0:-1]:
+    split_num = int(test_data.index(one_var))
+    var_name = one_var[-1] [0]
+    files_amt = one_var[-1][1]
+    flag = 1
+    accuate = 0
+    for i in range(0, files_amt):
+        # w*x+b
+        judge_func = var_amt - 1
+        for j in range(0, var_amt):
+            if j == split_num:
+                continue
+            if (vector_multi(w[split_num], one_var[i], b[split_num]) >= vector_multi(w[j], one_var[i], b[j])):
+                # adjust the w and b
+                judge_func -= 1
+        if judge_func == 0:
+            # print("accuate")
+            accuate += 1
+        # else:
+            # print("false")
+    # print(accuate)
+    print(accuate/files_amt)
             
 
 
