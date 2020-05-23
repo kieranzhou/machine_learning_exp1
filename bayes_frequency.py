@@ -67,6 +67,7 @@ def frequencymker(flag1):
         print("having calculating the term frequency of " + train_var)
         print("time interval:" + str(time_end - time_start))
     documents.append(len(os.listdir(traget_dir)))
+    
     # write the file----------------------------------------------------------------------------------------------
     if flag1 == 0:
         target_file = "train_frequency_bayes.txt"

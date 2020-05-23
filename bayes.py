@@ -12,11 +12,12 @@ import math
 # step 5 read the test data and the prior_prob and then verify it 
 
 def checker(splitor, checklist, total):
-    Pa = math.log(splitor[-1][1]/total)
+    Pa = -math.log(splitor[-1][1]/total)
     temp_calculator = 0
     temp_calculator += Pa
     for item in checklist:
-        temp_calculator += item[1] * math.log(splitor[item[0]])
+        temp_calculator -= item[1] * math.log(splitor[item[0]])
+    # print(temp_calculator)
     return temp_calculator
 
 stat_dic = []   #need to change the global dic
@@ -39,9 +40,9 @@ with open('prior_prob.txt', 'r') as f:
         files_amt = int(tmp_list[1])
         temp_point = 2
         for i in range(0, dic_len):
-            data[counter].append([])        #files
+            # data[counter].append([])        #files
             # read 2 elements
-            data[counter].append(int(tmp_list[temp_point + 1]))
+            data[counter].append(float(tmp_list[temp_point + 1]))
             temp_point += 2
         data[counter].append([var_name, files_amt]) #adding files amount
         total_train_file += files_amt
@@ -78,9 +79,11 @@ with open('test_frequency_bayes.txt', 'r') as f:
 
 #-------check----------------------------------------------------------------------------------------------------------
 accurate = 0
+test_total_file = 0
 for var in testingdata[0:-1]:
     var_name = var[-1][0]
     files_amt = var[-1][1]
+    test_total_file += files_amt
     for i in range(0, files_amt):
         checklist = []
         attr_amt = var[i][-1][0]
@@ -89,12 +92,16 @@ for var in testingdata[0:-1]:
             attr_frqcy = var[i][j][1]
             checklist.append([attr_no, attr_frqcy])
         # check 20 bayes to determine which one is the best
-        max = -1
-        max_name = ' '
-        for var_splitor in data:
+        min = 5000
+        min_name = ' '
+        for var_splitor in data[0:-1]:
             temp = checker(var_splitor, checklist, total_train_file)
-            if temp > max:
-                max = temp
-                max_name = var_splitor[-1][0]
-        if max_name == var_name:
-            accurate += 1    
+            if temp < min:
+                min = temp
+                min_name = var_splitor[-1][0]
+                # print("Update")
+        if min_name == var_name:
+            accurate += 1
+            print("accurate-----------------------------------------")    
+print("accurate hit is " + str(accurate))
+print("accurate rate is " + str(accurate/test_total_file))
