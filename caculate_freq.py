@@ -10,11 +10,12 @@
 import re
 import os
 import math
-
+import sys
+import time
 #----------------------------------------------------------------------------------------------------------------------
 def zerolistmaker(n):
     listofzeros = [0] * n
-    print(type(listofzeros))
+    # print(type(listofzeros))
     return listofzeros
 #-----------------------------------------step0 prepare all the textfile--------------------------------------------------------------------------------------------
 def frequencymker(flag1):
@@ -29,6 +30,7 @@ def frequencymker(flag1):
     fp.close()
     documents = []  #saving the info
     for train_var in os.listdir(traget_dir):
+        time_start = time.time()
         varis = []   #each document saves each document's feature
         doc_dir = traget_dir + '\\' + train_var
         for data_file in os.listdir(doc_dir):
@@ -69,6 +71,9 @@ def frequencymker(flag1):
             varis.append(file_features)
         varis.append([len(os.listdir(doc_dir)), train_var])
         documents.append(varis)
+        time_end = time.time()
+        print("having calculating the term frequency of " + train_var)
+        print("time interval:" + str(time_end - time_start))
     documents.append(len(os.listdir(traget_dir)))
 
     # next step = idf-----------------------------------------------------------------------------------------
@@ -92,6 +97,8 @@ def frequencymker(flag1):
             for feat in doc[0:-1]:
                 feat.append(idf[feat[0]])   #property idf
                 feat.append(idf[feat[0]] * feat[1]) #tf-idf frequency
+        var_name = var[-1][1]
+        print("after calculating the tf-ifd of" + var_name)
     # write the file----------------------------------------------------------------------------------------------
     if flag1 == 0:
         target_file = "train_frequency.txt"
@@ -114,4 +121,6 @@ def frequencymker(flag1):
     fp.close()
 
 frequencymker(0)
+print("finish the train-data frequency built")
 frequencymker(1)
+print("finish the test-data frequency built")

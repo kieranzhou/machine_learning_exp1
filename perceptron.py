@@ -1,6 +1,7 @@
 # this file is for calculate the perceptron
 # step1:read the file from frequency.txt----------------------------------------
 import re
+import sys
 def zerolistmaker(n):
     listofzeros = [0] * n
     # print(type(listofzeros))
@@ -47,7 +48,7 @@ with open('train_frequency.txt', 'r') as f:
         data[counter].append([var_name, files_amt]) #adding files amount
         counter += 1
     data.append(counter)                            #adding vars amount
-# print(data[-1])                            
+print("read the train dataset")                            
 #part2: reading the dictionary--------------------------------------------------------------------------------------------------------------------------
 
 stat_dic = []   #need to change the global dic
@@ -55,6 +56,7 @@ fp = open('Dictionary.txt', encoding = 'gb18030', errors= 'ignore')
 for line in fp.readlines():
     stat_dic.append(line.strip('\n'))
 fp.close()
+print("read the Dictionary")
 
 #part3: preparing for the perceptron--------------------------------------------------------------------------------------------------------------------------
 
@@ -92,12 +94,13 @@ for one_var in data[0:-1]:
         if flag == 1:
             break
 # presplitorfinish-------------------------------------------------------------------------------------------------------------------------------------------
-
+print("finish estimate the parameters primarily")
 # try till it satisfy the result or try serveral times and just have an well result
 # step could be deliminate with the loop goes on.
 # i thought it is the second option that could just be so-so answer. mix
 
 #only for test------------------------------------------------------------------------------------------------------
+strarrs = ['/','|','\\']
 for time in range(0, 100):
     for one_var in data[0:-1]:
         split_num = int(data.index(one_var))
@@ -112,8 +115,8 @@ for time in range(0, 100):
                         continue
                     if (vector_multi(w[split_num], one_var[i], b[split_num]) <= vector_multi(w[j], one_var[i], b[j])):
                         # adjust the w and b
-                        print(vector_multi(w[split_num], one_var[i], b[split_num]))
-                        print(vector_multi(w[j], one_var[i], b[j]))
+                        # print(vector_multi(w[split_num], one_var[i], b[split_num]))
+                        # print(vector_multi(w[j], one_var[i], b[j]))
                         w[split_num] = adjustw(w[split_num], one_var[i], step, 1)
                         w[j] = adjustw(w[j], one_var[i], step, -1)
                         b[split_num] += step / (time+1)
@@ -121,12 +124,13 @@ for time in range(0, 100):
                         flag = 0
             if flag == 1:
                 break
-timetosee = 0
+    sys.stdout.write(strarrs[time % 3] + '{}/100:'.format(time+1) + '>' * int(time/5) + ' ' * int((100-time)/5) + '\r')
+    sys.stdout.flush()
 
 # approxmately 100  and maybe we could successed it, but maybe it is too similar with the train data
 # adjusting the parameter is the most important affair now.
 
-print("train check------------------------------------------------------------")
+print("train data check------------------------------------------------------------")
 # making a checking function
 for one_var in data[0:-1]:
     split_num = int(data.index(one_var))
@@ -149,37 +153,14 @@ for one_var in data[0:-1]:
         # else:
             # print("false")
     # print(accuate)
-    print(accuate/files_amt)
+    print(var_name + ":" + str(accuate/files_amt))
 
 
 
 #only for test------------------------------------------------------------------------------------------------------
 
-""" while(1):
-    for one_var in data:
-        split_num = data.index(one_var)
-        var_name = one_var[-1] [0]
-        files_amt = one_var[-1][1]
-        while(1):
-            flag = 1
-            for i in range(0, files_amt):
-                # w*x+b
-                for j in range(0, var_amt):
-                    if j == split_num:
-                        continue
-                    if (vector_multi(w[split_num], one_var[i], b[split_num]) <= vector_multi(w[split_num[j]], one_var[i], b[j])):
-                        # adjust the w and b
-                        w[split_num] = adjustw(w[split_num], one_var[i], step, 1)
-                        w[j] = adjustw(w[j], one_var[i], step, -1)
-                        b[split_num] += step
-                        b[j] += step
-                        flag = 0
-            if flag == 1:
-                break """
-
-
 # writing the checking function for all the testing data
-print("testing train-----------------------------------------------------------------") 
+print("test data check-----------------------------------------------------------------") 
 
 test_data = []
 # empty_list = [] append(copy.deepcopy(empty_list))
@@ -205,8 +186,10 @@ with open('test_frequency.txt', 'r') as f:
         test_data[test_counter].append([var_name, files_amt]) #adding files amount
         test_counter += 1
     test_data.append(test_counter)                            #adding vars amount
+print("read the testing dataset")
 
-
+all_file = 0
+all_accuate = 0
 for one_var in test_data[0:-1]:
     split_num = int(test_data.index(one_var))
     var_name = one_var[-1] [0]
@@ -228,7 +211,10 @@ for one_var in test_data[0:-1]:
         # else:
             # print("false")
     # print(accuate)
-    print(accuate/files_amt)
+    print(var_name + ":" + str(accuate/files_amt))
+    all_accuate += accuate
+    all_file += files_amt
+print("global accurate rate is " + str(all_accuate/all_file))
             
 
 
