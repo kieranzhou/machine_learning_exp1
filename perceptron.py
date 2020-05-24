@@ -216,11 +216,3 @@ for one_var in test_data[0:-1]:
     all_file += files_amt
 print("global accurate rate is " + str(all_accuate/all_file))
             
-
-
-
-
-
-
-
-            
