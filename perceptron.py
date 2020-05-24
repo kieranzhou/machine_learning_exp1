@@ -23,7 +23,10 @@ def adjustw(w, x, step, para):
         w[temp] += step * x[i][3] * para
     return w
 
-
+def printw(w):
+    for i in range(0, len(w) - 1):
+        print(w[i])
+    
 data = []
 # empty_list = [] append(copy.deepcopy(empty_list))
 counter = 0      #counter is for vars
@@ -101,7 +104,9 @@ print("finish estimate the parameters primarily")
 
 #only for test------------------------------------------------------------------------------------------------------
 strarrs = ['/','|','\\']
-for time in range(0, 100):
+times = 20
+chartime = times/20
+for time in range(0, times):
     for one_var in data[0:-1]:
         split_num = int(data.index(one_var))
         var_name = one_var[-1] [0]
@@ -113,18 +118,20 @@ for time in range(0, 100):
                 for j in range(0, var_amt):
                     if j == split_num:
                         continue
-                    if (vector_multi(w[split_num], one_var[i], b[split_num]) <= vector_multi(w[j], one_var[i], b[j])):
+                    vector_the = vector_multi(w[split_num], one_var[i], b[split_num])
+                    vector_other = vector_multi(w[j], one_var[i], b[j])
+                    if (vector_the <= vector_other):
                         # adjust the w and b
-                        # print(vector_multi(w[split_num], one_var[i], b[split_num]))
-                        # print(vector_multi(w[j], one_var[i], b[j]))
                         w[split_num] = adjustw(w[split_num], one_var[i], step, 1)
                         w[j] = adjustw(w[j], one_var[i], step, -1)
-                        b[split_num] += step / (time+1)
-                        b[j] -= step / (time + 1)
+                        b[split_num] += step 
+                        b[j] -= step 
                         flag = 0
             if flag == 1:
                 break
-    sys.stdout.write(strarrs[time % 3] + '{}/100:'.format(time+1) + '>' * int(time/5) + ' ' * int((100-time)/5) + '\r')
+    # for i in range(0, var_amt):
+    #     printw(w[i])
+    sys.stdout.write(strarrs[time % 3] + '{}/{}:'.format(time+1, times) + '>' * (int(time/chartime)) + '\r')
     sys.stdout.flush()
 
 # approxmately 100  and maybe we could successed it, but maybe it is too similar with the train data
@@ -202,9 +209,14 @@ for one_var in test_data[0:-1]:
         for j in range(0, var_amt):
             if j == split_num:
                 continue
-            if (vector_multi(w[split_num], one_var[i], b[split_num]) >= vector_multi(w[j], one_var[i], b[j])):
+            vector_the = vector_multi(w[split_num], one_var[i], b[split_num])
+            vector_other = vector_multi(w[j], one_var[i], b[j])
+            if (vector_the >= vector_other):
                 # adjust the w and b
                 judge_func -= 1
+            else:
+                print("vectorthe:" + str(vector_the))
+                print("vectorother:" + str(j) + '\t' + str(vector_other))
         if judge_func == 0:
             # print("accuate")
             accuate += 1
